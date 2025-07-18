@@ -1,8 +1,4 @@
-type Todo = {
-  id: string;
-  title: string;
-  completed: boolean;
-};
+import { Todo } from '../types/Todo';
 
 export default function TodoItem({ todo }: { todo: Todo }) {
   return (

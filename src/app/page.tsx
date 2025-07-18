@@ -1,33 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useTodos } from "../hooks/useTodos";
 import TodoList from "../components/TodoList";
 import TodoFooter from "../components/TodoFooter";
 
-// Definición del tipo Todo
-export type Todo = {
-  id: string;
-  title: string;
-  completed: boolean;
-};
-
 export default function Home() {
-  // Estado para la lista de todos
-  const [todos, setTodos] = useState<Todo[]>([]);
-  // Estado para el input controlado
-  const [input, setInput] = useState("");
-
-  // Handler para añadir un nuevo todo
-  const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const title = input.trim();
-    if (!title) return;
-    setTodos([
-      ...todos,
-      { id: crypto.randomUUID(), title, completed: false },
-    ]);
-    setInput("");
-  };
+  const { todos, input, setInput, handleAddTodo } = useTodos();
 
   return (
     <section className="bg-gray-100 min-h-screen flex items-center justify-center">
