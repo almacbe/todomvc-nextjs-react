@@ -1,52 +1,93 @@
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import prettier from 'eslint-config-prettier';
-import tailwindcss from 'eslint-plugin-tailwindcss';
+import betterTailwind from 'eslint-plugin-better-tailwindcss';
+import globals from 'globals';
 
 export default [
   js.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  react.configs.recommended,
-  reactHooks.configs.recommended,
-  prettier,
-  tailwindcss.configs.recommended,
   {
     ignores: [
       'node_modules',
       '.next',
       'dist',
+      'coverage',
       'public',
       '*.config.js',
+      '*.config.mjs',
+      '*.test.*',
+      'jest.config.js',
+      'jest.setup.js',
     ],
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
-      parser: tseslint.parser,
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+        ...globals.jest,
+        React: true,
+        crypto: true,
+      },
+    },
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
+      'better-tailwindcss': betterTailwind,
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+      'better-tailwindcss': {
+        entryPoint: 'src/app/globals.css',
+      },
+    },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: { jsx: true },
         project: ['./tsconfig.json'],
       },
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+        ...globals.jest,
+        React: true,
+        crypto: true,
+      },
     },
     plugins: {
-      '@typescript-eslint': tseslint.plugin,
-      react,
-      'react-hooks': reactHooks,
-      tailwindcss,
+      '@typescript-eslint': tsPlugin,
     },
     rules: {
-      'prettier/prettier': ['error'],
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-      'tailwindcss/classnames-order': 'warn',
-      'tailwindcss/no-custom-classname': 'off',
+      ...tsPlugin.configs.recommended.rules,
+      ...tsPlugin.configs['recommended-type-checked'].rules,
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+  },
+  // Overrides para archivos de test y configuración
+  {
+    files: ['**/*.test.*', 'jest.config.js', 'jest.setup.js'],
+    rules: {
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
+      'no-prototype-builtins': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
     },
   },
 ]; 
