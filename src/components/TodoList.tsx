@@ -1,3 +1,5 @@
+import TodoItem from "./TodoItem";
+
 type Todo = {
   id: string;
   title: string;
@@ -8,7 +10,7 @@ export default function TodoList({ todos }: { todos: Todo[] }) {
   return (
     <ul className="divide-y divide-gray-200">
       {todos.map(todo => (
-        <li key={todo.id} className="p-4 text-xl">{todo.title}</li>
+        <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>
   );
