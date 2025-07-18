@@ -37,4 +37,4 @@ describe('TodoMVC - Página principal', () => {
     expect(screen.getByText('Tarea 2')).toBeInTheDocument();
     expect(screen.getByText('Tarea 3')).toBeInTheDocument();
   });
-}); 
+});

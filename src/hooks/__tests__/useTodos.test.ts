@@ -15,11 +15,15 @@ describe('useTodos', () => {
     // Filtro all
     expect(result.current.filteredTodos).toHaveLength(3);
     // Filtro active
-    act(() => { result.current.setFilter('active'); });
+    act(() => {
+      result.current.setFilter('active');
+    });
     expect(result.current.filteredTodos).toHaveLength(2);
-    expect(result.current.filteredTodos.every(t => !t.completed)).toBe(true);
+    expect(result.current.filteredTodos.every((t) => !t.completed)).toBe(true);
     // Filtro completed
-    act(() => { result.current.setFilter('completed'); });
+    act(() => {
+      result.current.setFilter('completed');
+    });
     expect(result.current.filteredTodos).toHaveLength(1);
     expect(result.current.filteredTodos[0].completed).toBe(true);
   });
@@ -35,4 +39,4 @@ describe('useTodos', () => {
     });
     expect(result.current.activeCount).toBe(2);
   });
-}); 
+});

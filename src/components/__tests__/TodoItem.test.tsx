@@ -25,4 +25,4 @@ describe('TodoItem', () => {
     await userEvent.click(checkbox);
     expect(onToggle).toHaveBeenCalledWith('1');
   });
-}); 
+});
