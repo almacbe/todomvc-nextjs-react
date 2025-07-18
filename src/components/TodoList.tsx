@@ -1,4 +1,3 @@
-// Definición local del tipo Todo (puedes moverlo a un archivo común si lo prefieres)
 type Todo = {
   id: string;
   title: string;
