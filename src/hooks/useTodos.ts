@@ -16,5 +16,13 @@ export function useTodos() {
     setInput("");
   };
 
-  return { todos, setTodos, input, setInput, handleAddTodo };
+  const handleToggleTodo = (id: string) => {
+    setTodos(todos =>
+      todos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
+  return { todos, setTodos, input, setInput, handleAddTodo, handleToggleTodo };
 } 

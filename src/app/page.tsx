@@ -5,7 +5,7 @@ import TodoList from "../components/TodoList";
 import TodoFooter from "../components/TodoFooter";
 
 export default function Home() {
-  const { todos, input, setInput, handleAddTodo } = useTodos();
+  const { todos, input, setInput, handleAddTodo, handleToggleTodo } = useTodos();
 
   return (
     <section className="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -23,7 +23,7 @@ export default function Home() {
           </form>
         </header>
         <section>
-          <TodoList todos={todos} />
+          <TodoList todos={todos} onToggle={handleToggleTodo} />
         </section>
         <footer className="mt-6">
           <TodoFooter />
