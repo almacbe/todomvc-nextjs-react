@@ -1,6 +1,9 @@
-"use client";
-
-import { useState } from "react";
+// Definición local del tipo Todo (puedes moverlo a un archivo común si lo prefieres)
+type Todo = {
+  id: string;
+  title: string;
+  completed: boolean;
+};
 
 export default function TodoList({ todos }: { todos: Todo[] }) {
   return (
