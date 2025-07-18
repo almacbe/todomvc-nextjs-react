@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Todo } from "../types/Todo";
 
+export type Filter = 'all' | 'active' | 'completed';
+
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState("");
+  const [filter, setFilter] = useState<Filter>('all');
 
   const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,5 +27,24 @@ export function useTodos() {
     );
   };
 
-  return { todos, setTodos, input, setInput, handleAddTodo, handleToggleTodo };
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'active') return !todo.completed;
+    if (filter === 'completed') return todo.completed;
+    return true;
+  });
+
+  const activeCount = todos.filter(todo => !todo.completed).length;
+
+  return {
+    todos,
+    setTodos,
+    input,
+    setInput,
+    handleAddTodo,
+    handleToggleTodo,
+    filter,
+    setFilter,
+    filteredTodos,
+    activeCount,
+  };
 } 

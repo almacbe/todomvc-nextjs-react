@@ -5,7 +5,16 @@ import TodoList from "../components/TodoList";
 import TodoFooter from "../components/TodoFooter";
 
 export default function Home() {
-  const { todos, input, setInput, handleAddTodo, handleToggleTodo } = useTodos();
+  const {
+    filteredTodos,
+    handleToggleTodo,
+    input,
+    setInput,
+    handleAddTodo,
+    filter,
+    setFilter,
+    activeCount,
+  } = useTodos();
 
   return (
     <section className="bg-[#f5f5f5] min-h-screen flex flex-col items-center justify-start sm:justify-center font-sans">
@@ -25,10 +34,10 @@ export default function Home() {
           </form>
         </header>
         <section className="px-8 py-4">
-          <TodoList todos={todos} onToggle={handleToggleTodo} />
+          <TodoList todos={filteredTodos} onToggle={handleToggleTodo} />
         </section>
         <footer className="px-8 pb-6 pt-2">
-          <TodoFooter />
+          <TodoFooter filter={filter} setFilter={setFilter} activeCount={activeCount} />
         </footer>
       </div>
       <footer className="mt-8 text-gray-400 text-xs text-center select-none">
