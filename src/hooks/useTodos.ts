@@ -27,6 +27,20 @@ export function useTodos() {
     );
   };
 
+  const handleEditTodo = (id: string, newTitle: string) => {
+    setTodos(todos =>
+      newTitle.trim() === ''
+        ? todos.filter(todo => todo.id !== id)
+        : todos.map(todo =>
+            todo.id === id ? { ...todo, title: newTitle.trim() } : todo
+          )
+    );
+  };
+
+  const handleDeleteTodo = (id: string) => {
+    setTodos(todos => todos.filter(todo => todo.id !== id));
+  };
+
   const filteredTodos = todos.filter(todo => {
     if (filter === 'active') return !todo.completed;
     if (filter === 'completed') return todo.completed;
@@ -42,6 +56,8 @@ export function useTodos() {
     setInput,
     handleAddTodo,
     handleToggleTodo,
+    handleEditTodo,
+    handleDeleteTodo,
     filter,
     setFilter,
     filteredTodos,

@@ -8,6 +8,8 @@ export default function Home() {
   const {
     filteredTodos,
     handleToggleTodo,
+    handleEditTodo,
+    handleDeleteTodo,
     input,
     setInput,
     handleAddTodo,
@@ -34,7 +36,12 @@ export default function Home() {
           </form>
         </header>
         <section className="px-8 py-4">
-          <TodoList todos={filteredTodos} onToggle={handleToggleTodo} />
+          <TodoList
+            todos={filteredTodos}
+            onToggle={handleToggleTodo}
+            onEdit={handleEditTodo}
+            onDelete={handleDeleteTodo}
+          />
         </section>
         <footer className="px-8 pb-6 pt-2">
           <TodoFooter filter={filter} setFilter={setFilter} activeCount={activeCount} />
