@@ -3,7 +3,7 @@ import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import betterTailwind from 'eslint-plugin-better-tailwindcss';
+
 import globals from 'globals';
 
 export default [
@@ -34,7 +34,6 @@ export default [
     plugins: {
       react,
       'react-hooks': reactHooks,
-      'better-tailwindcss': betterTailwind,
     },
     rules: {
       'react/react-in-jsx-scope': 'off',
@@ -43,9 +42,6 @@ export default [
     settings: {
       react: {
         version: 'detect',
-      },
-      'better-tailwindcss': {
-        entryPoint: 'src/app/globals.css',
       },
     },
   },

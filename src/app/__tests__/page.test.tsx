@@ -19,8 +19,8 @@ describe('TodoMVC - Página principal', () => {
     render(<Home />);
     const input = screen.getByPlaceholderText(/what needs to be done/i);
     await userEvent.type(input, '   {enter}');
-    // No debe aparecer ningún elemento en la lista
-    expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
+    // No debe aparecer ningún elemento en la lista de todos (excluyendo los filtros)
+    expect(screen.queryByTestId('todo-item')).not.toBeInTheDocument();
   });
 
   it('renderiza múltiples tareas', () => {
