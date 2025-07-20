@@ -9,18 +9,6 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   {
-    ignores: [
-      'node_modules',
-      '.next',
-      'dist',
-      'coverage',
-      'public',
-      '*.config.js',
-      '*.config.mjs',
-      '*.test.*',
-      'jest.config.js',
-      'jest.setup.js',
-    ],
     files: ['src/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       globals: {
@@ -29,6 +17,7 @@ export default [
         ...globals.jest,
         React: true,
         crypto: true,
+        process: true,
       },
     },
     plugins: {
@@ -61,6 +50,7 @@ export default [
         ...globals.jest,
         React: true,
         crypto: true,
+        process: true,
       },
     },
     plugins: {

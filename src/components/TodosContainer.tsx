@@ -22,26 +22,26 @@ export default function TodosContainer() {
   };
 
   const toggleTodo = (id: string) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
+    setTodos(
+      todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)),
+    );
   };
 
   const deleteTodo = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const activeCount = todos.filter(todo => !todo.completed).length;
+  const activeCount = todos.filter((todo) => !todo.completed).length;
 
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
         <form onSubmit={addTodo}>
-          <input 
-            className="new-todo" 
-            placeholder="What needs to be done?" 
-            autoFocus 
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+            autoFocus
             value={input}
             onChange={(e) => setInput(e.target.value)}
             data-testid="new-todo-input"
@@ -52,20 +52,17 @@ export default function TodosContainer() {
         <input className="toggle-all" type="checkbox" id="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
-          {todos.map(todo => (
+          {todos.map((todo) => (
             <li key={todo.id} className={todo.completed ? 'completed' : ''} data-testid="todo-item">
               <div className="view">
-                <input 
-                  className="toggle" 
-                  type="checkbox" 
+                <input
+                  className="toggle"
+                  type="checkbox"
                   checked={todo.completed}
                   onChange={() => toggleTodo(todo.id)}
                 />
                 <label>{todo.title}</label>
-                <button 
-                  className="destroy" 
-                  onClick={() => deleteTodo(todo.id)}
-                />
+                <button className="destroy" onClick={() => deleteTodo(todo.id)} />
               </div>
             </li>
           ))}
@@ -77,8 +74,8 @@ export default function TodosContainer() {
         </span>
         <ul className="filters">
           <li>
-            <a 
-              className={filter === 'all' ? 'selected' : ''} 
+            <a
+              className={filter === 'all' ? 'selected' : ''}
               onClick={() => setFilter('all')}
               style={{ cursor: 'pointer' }}
             >
@@ -86,8 +83,8 @@ export default function TodosContainer() {
             </a>
           </li>
           <li>
-            <a 
-              className={filter === 'active' ? 'selected' : ''} 
+            <a
+              className={filter === 'active' ? 'selected' : ''}
               onClick={() => setFilter('active')}
               style={{ cursor: 'pointer' }}
             >
@@ -95,8 +92,8 @@ export default function TodosContainer() {
             </a>
           </li>
           <li>
-            <a 
-              className={filter === 'completed' ? 'selected' : ''} 
+            <a
+              className={filter === 'completed' ? 'selected' : ''}
               onClick={() => setFilter('completed')}
               style={{ cursor: 'pointer' }}
             >
