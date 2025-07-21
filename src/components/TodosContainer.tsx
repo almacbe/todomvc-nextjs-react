@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Todo } from '../types/Todo';
 
 export default function TodosContainer() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+  const [editOriginal, setEditOriginal] = useState('');
+  const editInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +37,60 @@ export default function TodosContainer() {
 
   const activeCount = todos.filter((todo) => !todo.completed).length;
 
+  const startEditing = (id: string, title: string) => {
+    setEditingId(id);
+    setEditValue(title);
+    setEditOriginal(title);
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditValue(e.target.value);
+  };
+
+  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
+    if (e.key === 'Enter') {
+      finishEditing(id);
+    } else if (e.key === 'Escape') {
+      cancelEditing();
+    }
+  };
+
+  const finishEditing = (id: string) => {
+    const trimmed = editValue.trim();
+    if (trimmed === '') {
+      deleteTodo(id);
+    } else {
+      setTodos(todos.map(todo => todo.id === id ? { ...todo, title: trimmed } : todo));
+    }
+    setEditingId(null);
+    setEditValue('');
+    setEditOriginal('');
+  };
+
+  const cancelEditing = () => {
+    setEditValue(editOriginal);
+    setEditingId(null);
+    setEditOriginal('');
+  };
+
+  useEffect(() => {
+    if (editingId && editInputRefs.current[editingId]) {
+      editInputRefs.current[editingId]?.focus();
+    }
+  }, [editingId]);
+
+  useEffect(() => {
+    function onHashChange() {
+      const hash = window.location.hash;
+      if (hash === '#/active') setFilter('active');
+      else if (hash === '#/completed') setFilter('completed');
+      else setFilter('all');
+    }
+    window.addEventListener('hashchange', onHashChange);
+    onHashChange();
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -48,61 +106,96 @@ export default function TodosContainer() {
           />
         </form>
       </header>
-      <section className="main">
-        <input className="toggle-all" type="checkbox" id="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          {todos.map((todo) => (
-            <li key={todo.id} className={todo.completed ? 'completed' : ''} data-testid="todo-item">
-              <div className="view">
-                <input
-                  className="toggle"
-                  type="checkbox"
-                  checked={todo.completed}
-                  onChange={() => toggleTodo(todo.id)}
-                />
-                <label>{todo.title}</label>
-                <button className="destroy" onClick={() => deleteTodo(todo.id)} />
-              </div>
+      {todos.length > 0 && (
+        <section className="main">
+          <input className="toggle-all" type="checkbox" id="toggle-all" />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+          <ul className="todo-list">
+            {todos.map((todo) => {
+              const isVisible =
+                filter === 'all' ||
+                (filter === 'active' && !todo.completed) ||
+                (filter === 'completed' && todo.completed);
+              return (
+                <li
+                  key={todo.id}
+                  className={
+                    todo.completed && editingId === todo.id
+                      ? 'completed editing'
+                      : editingId === todo.id
+                      ? 'editing'
+                      : todo.completed
+                      ? 'completed'
+                      : ''
+                  }
+                  data-testid="todo-item"
+                  style={!isVisible ? { display: 'none' } : {}}
+                >
+                <div className="view">
+                  <input
+                    className="toggle"
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={() => toggleTodo(todo.id)}
+                  />
+                  <label onDoubleClick={() => startEditing(todo.id, todo.title)}>{todo.title}</label>
+                  <button className="destroy" onClick={() => deleteTodo(todo.id)} />
+                </div>
+                {editingId === todo.id && (
+                  <input
+                    className="edit"
+                    ref={el => {
+                      editInputRefs.current[todo.id] = el;
+                    }}
+                    value={editValue}
+                    onChange={handleEditChange}
+                    onBlur={() => finishEditing(todo.id)}
+                    onKeyDown={e => handleEditKeyDown(e, todo.id)}
+                  />
+                )}
+              </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count">
+            <strong>{activeCount}</strong> item{activeCount !== 1 ? 's' : ''} left!
+          </span>
+          <ul className="filters">
+            <li>
+              <a
+                className={filter === 'all' ? 'selected' : ''}
+                href="#/"
+                style={{ cursor: 'pointer' }}
+              >
+                All
+              </a>
             </li>
-          ))}
-        </ul>
-      </section>
-      <footer className="footer">
-        <span className="todo-count">
-          <strong>{activeCount}</strong> item{activeCount !== 1 ? 's' : ''} left!
-        </span>
-        <ul className="filters">
-          <li>
-            <a
-              className={filter === 'all' ? 'selected' : ''}
-              onClick={() => setFilter('all')}
-              style={{ cursor: 'pointer' }}
-            >
-              All
-            </a>
-          </li>
-          <li>
-            <a
-              className={filter === 'active' ? 'selected' : ''}
-              onClick={() => setFilter('active')}
-              style={{ cursor: 'pointer' }}
-            >
-              Active
-            </a>
-          </li>
-          <li>
-            <a
-              className={filter === 'completed' ? 'selected' : ''}
-              onClick={() => setFilter('completed')}
-              style={{ cursor: 'pointer' }}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
-        <button className="clear-completed">Clear completed</button>
-      </footer>
+            <li>
+              <a
+                className={filter === 'active' ? 'selected' : ''}
+                href="#/active"
+                style={{ cursor: 'pointer' }}
+              >
+                Active
+              </a>
+            </li>
+            <li>
+              <a
+                className={filter === 'completed' ? 'selected' : ''}
+                href="#/completed"
+                style={{ cursor: 'pointer' }}
+              >
+                Completed
+              </a>
+            </li>
+          </ul>
+          <button className="clear-completed">Clear completed</button>
+        </footer>
+      )}
     </section>
   );
 }
