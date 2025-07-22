@@ -116,7 +116,17 @@ export default function TodosContainer() {
       </header>
       {todos.length > 0 && (
         <section className="main">
-          <input className="toggle-all" type="checkbox" id="toggle-all" /><label htmlFor="toggle-all">Mark all as complete</label>
+          <input
+            className="toggle-all"
+            type="checkbox"
+            id="toggle-all"
+            checked={todos.length > 0 && todos.every(todo => todo.completed)}
+            onChange={e => {
+              const allCompleted = todos.every(todo => todo.completed);
+              setTodos(todos.map(todo => ({ ...todo, completed: !allCompleted })));
+            }}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
           <ul className="todo-list">
             {todos.map((todo) => {
               const isVisible =
