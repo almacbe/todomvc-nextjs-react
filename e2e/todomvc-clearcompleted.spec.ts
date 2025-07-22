@@ -13,7 +13,7 @@ async function createStandardItems(page) {
   await page.locator('.new-todo').press('Enter');
 }
 
-test.describe.skip('Clear completed button', () => {
+test.describe('Clear completed button', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.waitForSelector('.new-todo');

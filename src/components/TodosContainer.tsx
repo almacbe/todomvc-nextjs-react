@@ -217,7 +217,9 @@ export default function TodosContainer() {
               </a>
             </li>
           </ul>
-          <button className="clear-completed" onClick={() => setTodos(todos.filter(todo => !todo.completed))}>Clear completed</button>
+          {todos.some(todo => todo.completed) && (
+            <button className="clear-completed" onClick={() => setTodos(todos.filter(todo => !todo.completed))}>Clear completed</button>
+          )}
         </footer>
       )}
     </>
