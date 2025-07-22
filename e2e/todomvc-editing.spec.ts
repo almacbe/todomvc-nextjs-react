@@ -60,4 +60,4 @@ test.describe('Editing', () => {
     await page.locator('.todo-list li').nth(1).locator('.edit').press('Escape');
     await expect(page.locator('.todo-list li').nth(1)).toHaveText(TODO_ITEM_TWO);
   });
-}); 
+});

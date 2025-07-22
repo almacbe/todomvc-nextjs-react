@@ -7,9 +7,9 @@ export default function TodosContainer() {
   const [todos, setTodos] = useState<Todo[]>(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('todos');
-      if (stored) return JSON.parse(stored);
+      if (stored) return JSON.parse(stored) as Todo[];
     }
-    return [];
+    return [] as Todo[];
   });
   const [input, setInput] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
@@ -66,7 +66,7 @@ export default function TodosContainer() {
     if (trimmed === '') {
       deleteTodo(id);
     } else {
-      setTodos(todos.map(todo => todo.id === id ? { ...todo, title: trimmed } : todo));
+      setTodos(todos.map((todo) => (todo.id === id ? { ...todo, title: trimmed } : todo)));
     }
     setEditingId(null);
     setEditValue('');
@@ -101,13 +101,6 @@ export default function TodosContainer() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  // Filtrado de todos según el filtro activo
-  const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
-    return true;
-  });
-
   return (
     <>
       <header className="header">
@@ -118,7 +111,7 @@ export default function TodosContainer() {
           autoFocus
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={e => {
+          onKeyDown={(e) => {
             if (e.key === 'Enter') addTodo(e);
           }}
           data-testid="new-todo-input"
@@ -130,10 +123,10 @@ export default function TodosContainer() {
             className="toggle-all"
             type="checkbox"
             id="toggle-all"
-            checked={todos.length > 0 && todos.every(todo => todo.completed)}
-            onChange={e => {
-              const allCompleted = todos.every(todo => todo.completed);
-              setTodos(todos.map(todo => ({ ...todo, completed: !allCompleted })));
+            checked={todos.length > 0 && todos.every((todo) => todo.completed)}
+            onChange={() => {
+              const allCompleted = todos.every((todo) => todo.completed);
+              setTodos(todos.map((todo) => ({ ...todo, completed: !allCompleted })));
             }}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -150,38 +143,40 @@ export default function TodosContainer() {
                     todo.completed && editingId === todo.id
                       ? 'completed editing'
                       : editingId === todo.id
-                      ? 'editing'
-                      : todo.completed
-                      ? 'completed'
-                      : ''
+                        ? 'editing'
+                        : todo.completed
+                          ? 'completed'
+                          : ''
                   }
                   data-testid="todo-item"
                   style={!isVisible ? { display: 'none' } : {}}
                 >
-                <div className="view">
-                  <input
-                    className="toggle"
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => toggleTodo(todo.id)}
-                  />
-                  <label onDoubleClick={() => startEditing(todo.id, todo.title)}>{todo.title}</label>
-                  <button className="destroy" onClick={() => deleteTodo(todo.id)} />
-                </div>
-                {editingId === todo.id && (
-                  <input
-                    className="edit"
-                    ref={el => {
-                      editInputRefs.current[todo.id] = el;
-                    }}
-                    value={editValue}
-                    onChange={handleEditChange}
-                    onBlur={() => finishEditing(todo.id)}
-                    onKeyDown={e => handleEditKeyDown(e, todo.id)}
-                  />
-                )}
-              </li>
-            );
+                  <div className="view">
+                    <input
+                      className="toggle"
+                      type="checkbox"
+                      checked={todo.completed}
+                      onChange={() => toggleTodo(todo.id)}
+                    />
+                    <label onDoubleClick={() => startEditing(todo.id, todo.title)}>
+                      {todo.title}
+                    </label>
+                    <button className="destroy" onClick={() => deleteTodo(todo.id)} />
+                  </div>
+                  {editingId === todo.id && (
+                    <input
+                      className="edit"
+                      ref={(el) => {
+                        editInputRefs.current[todo.id] = el;
+                      }}
+                      value={editValue}
+                      onChange={handleEditChange}
+                      onBlur={() => finishEditing(todo.id)}
+                      onKeyDown={(event) => handleEditKeyDown(event, todo.id)}
+                    />
+                  )}
+                </li>
+              );
             })}
           </ul>
         </section>
@@ -193,32 +188,28 @@ export default function TodosContainer() {
           </span>
           <ul className="filters">
             <li>
-              <a
-                className={filter === 'all' ? 'selected' : ''}
-                href="#/"
-              >
+              <a className={filter === 'all' ? 'selected' : ''} href="#/">
                 All
               </a>
             </li>
             <li>
-              <a
-                className={filter === 'active' ? 'selected' : ''}
-                href="#/active"
-              >
+              <a className={filter === 'active' ? 'selected' : ''} href="#/active">
                 Active
               </a>
             </li>
             <li>
-              <a
-                className={filter === 'completed' ? 'selected' : ''}
-                href="#/completed"
-              >
+              <a className={filter === 'completed' ? 'selected' : ''} href="#/completed">
                 Completed
               </a>
             </li>
           </ul>
-          {todos.some(todo => todo.completed) && (
-            <button className="clear-completed" onClick={() => setTodos(todos.filter(todo => !todo.completed))}>Clear completed</button>
+          {todos.some((todo) => todo.completed) && (
+            <button
+              className="clear-completed"
+              onClick={() => setTodos(todos.filter((todo) => !todo.completed))}
+            >
+              Clear completed
+            </button>
           )}
         </footer>
       )}

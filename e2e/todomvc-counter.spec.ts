@@ -17,4 +17,4 @@ test.describe('Counter', () => {
     await page.locator('.new-todo').press('Enter');
     await expect(page.locator('.todo-count')).toHaveText(/2 items left/);
   });
-}); 
+});

@@ -2,7 +2,7 @@ import TodosContainer from '../components/TodosContainer';
 
 export default function Home() {
   return (
-    <> 
+    <>
       <section className="todoapp">
         <TodosContainer />
       </section>

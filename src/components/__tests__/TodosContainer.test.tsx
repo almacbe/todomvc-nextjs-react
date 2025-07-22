@@ -29,9 +29,9 @@ describe('TodosContainer', () => {
     // Solo deben quedar las tareas activas
     const items = screen.getAllByTestId('todo-item');
     expect(items).toHaveLength(2);
-    const texts = items.map(item => item.textContent);
-    expect(texts.some(t => t?.includes('Tarea 2'))).toBe(true);
-    expect(texts.some(t => t?.includes('Tarea 3'))).toBe(true);
+    const texts = items.map((item) => item.textContent);
+    expect(texts.some((t) => t?.includes('Tarea 2'))).toBe(true);
+    expect(texts.some((t) => t?.includes('Tarea 3'))).toBe(true);
   });
 
   it('no elimina nada si no hay completados', async () => {
@@ -40,14 +40,14 @@ describe('TodosContainer', () => {
     await userEvent.type(input, 'A{enter}');
     await userEvent.type(input, 'B{enter}');
     await userEvent.type(input, 'C{enter}');
-    const clearBtn = screen.getByText(/clear completed/i);
-    await userEvent.click(clearBtn);
+    // El botón no debe aparecer
+    expect(screen.queryByText(/clear completed/i)).toBeNull();
     const items = screen.getAllByTestId('todo-item');
     expect(items).toHaveLength(3);
-    const texts = items.map(item => item.textContent);
-    expect(texts.some(t => t?.includes('A'))).toBe(true);
-    expect(texts.some(t => t?.includes('B'))).toBe(true);
-    expect(texts.some(t => t?.includes('C'))).toBe(true);
+    const texts = items.map((item) => item.textContent);
+    expect(texts.some((t) => t?.includes('A'))).toBe(true);
+    expect(texts.some((t) => t?.includes('B'))).toBe(true);
+    expect(texts.some((t) => t?.includes('C'))).toBe(true);
   });
 
   it('elimina todos si todos están completados', async () => {
@@ -69,10 +69,11 @@ describe('TodosContainer', () => {
     const input = screen.getByPlaceholderText(/what needs to be done/i);
     await userEvent.type(input, 'A{enter}');
     await userEvent.type(input, 'B{enter}');
-    expect(screen.queryByText(/clear completed/i)).not.toBeNull(); // Aparece porque hay todos
+    // El botón no debe aparecer
+    expect(screen.queryByText(/clear completed/i)).toBeNull();
     // Eliminar todos los todos
     const destroyBtns = screen.getAllByRole('button');
     for (const btn of destroyBtns) await userEvent.click(btn);
-    expect(screen.queryByText(/clear completed/i)).toBeNull(); // No aparece si no hay todos
+    expect(screen.queryByText(/clear completed/i)).toBeNull();
   });
-}); 
+});

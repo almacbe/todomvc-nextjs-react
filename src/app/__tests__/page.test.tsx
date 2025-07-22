@@ -18,7 +18,7 @@ describe('TodoMVC - Página principal', () => {
     const input = screen.getByPlaceholderText(/what needs to be done/i);
     await userEvent.type(input, 'Aprender Testing{enter}');
     const items = await screen.findAllByTestId('todo-item');
-    expect(items.some(item => item.textContent?.includes('Aprender Testing'))).toBe(true);
+    expect(items.some((item) => item.textContent?.includes('Aprender Testing'))).toBe(true);
   });
 
   it('no añade tareas vacías', async () => {

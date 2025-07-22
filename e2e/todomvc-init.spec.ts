@@ -26,4 +26,4 @@ test.describe('No Todos', () => {
     await expect(page.locator('.footer')).not.toBeVisible();
     await expect(page.locator('.todo-list li')).toHaveCount(0);
   });
-}); 
+});

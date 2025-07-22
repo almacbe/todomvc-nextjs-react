@@ -53,4 +53,4 @@ test.describe('New Todo', () => {
     await expect(page.locator('.main')).toBeVisible();
     await expect(page.locator('.footer')).toBeVisible();
   });
-}); 
+});

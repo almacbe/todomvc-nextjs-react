@@ -74,4 +74,4 @@ test.describe('Routing', () => {
     await page.locator('.filters a').nth(2).click();
     await expect(page.locator('.filters a').nth(2)).toHaveClass(/selected/);
   });
-}); 
+});

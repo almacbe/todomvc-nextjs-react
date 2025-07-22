@@ -42,7 +42,9 @@ test.describe('Mark all as completed', () => {
     }
   });
 
-  test('complete all checkbox should update state when items are completed / cleared', async ({ page }) => {
+  test('complete all checkbox should update state when items are completed / cleared', async ({
+    page,
+  }) => {
     await page.locator('.toggle-all').check();
     await expect(page.locator('.toggle-all')).toBeChecked();
     await page.locator('.todo-list li').nth(0).locator('.toggle').uncheck();
@@ -50,4 +52,4 @@ test.describe('Mark all as completed', () => {
     await page.locator('.todo-list li').nth(0).locator('.toggle').check();
     await expect(page.locator('.toggle-all')).toBeChecked();
   });
-}); 
+});

@@ -39,4 +39,4 @@ test.describe('Clear completed button', () => {
     await page.locator('.clear-completed').click();
     await expect(page.locator('.clear-completed')).not.toBeVisible();
   });
-}); 
+});

@@ -36,4 +36,4 @@ test.describe('Item', () => {
     await expect(page.locator('.todo-list li').nth(0)).not.toHaveClass(/completed/);
     await expect(page.locator('.todo-list li').nth(1)).not.toHaveClass(/completed/);
   });
-}); 
+});
