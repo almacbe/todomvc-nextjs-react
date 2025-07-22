@@ -2,8 +2,10 @@ import TodosContainer from '../components/TodosContainer';
 
 export default function Home() {
   return (
-    <div>
-      <TodosContainer />
+    <> 
+      <section className="todoapp">
+        <TodosContainer />
+      </section>
       <footer className="info">
         <p>Double-click to edit a todo</p>
         <p>
@@ -13,6 +15,6 @@ export default function Home() {
           Part of <a href="http://todomvc.com">TodoMVC</a>
         </p>
       </footer>
-    </div>
+    </>
   );
 }

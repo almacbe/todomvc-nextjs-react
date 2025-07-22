@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import '../styles/base.css';
+import '../styles/todomvc.css';
 
 export const metadata: Metadata = {
   title: 'TodoMVC',

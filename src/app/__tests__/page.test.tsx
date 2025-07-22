@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Home from '../page';
@@ -12,7 +13,8 @@ describe('TodoMVC - Página principal', () => {
     render(<Home />);
     const input = screen.getByPlaceholderText(/what needs to be done/i);
     await userEvent.type(input, 'Aprender Testing{enter}');
-    expect(screen.getByText('Aprender Testing')).toBeInTheDocument();
+    const items = await screen.findAllByTestId('todo-item');
+    expect(items.some(item => item.textContent?.includes('Aprender Testing'))).toBe(true);
   });
 
   it('no añade tareas vacías', async () => {

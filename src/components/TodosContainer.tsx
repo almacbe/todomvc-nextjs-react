@@ -91,25 +91,32 @@ export default function TodosContainer() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
+  // Filtrado de todos según el filtro activo
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'active') return !todo.completed;
+    if (filter === 'completed') return todo.completed;
+    return true;
+  });
+
   return (
-    <section className="todoapp">
+    <>
       <header className="header">
         <h1>todos</h1>
-        <form onSubmit={addTodo}>
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            autoFocus
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            data-testid="new-todo-input"
-          />
-        </form>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          autoFocus
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter') addTodo(e);
+          }}
+          data-testid="new-todo-input"
+        />
       </header>
       {todos.length > 0 && (
         <section className="main">
-          <input className="toggle-all" type="checkbox" id="toggle-all" />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          <input className="toggle-all" type="checkbox" id="toggle-all" /><label htmlFor="toggle-all">Mark all as complete</label>
           <ul className="todo-list">
             {todos.map((todo) => {
               const isVisible =
@@ -154,7 +161,7 @@ export default function TodosContainer() {
                   />
                 )}
               </li>
-              );
+            );
             })}
           </ul>
         </section>
@@ -169,7 +176,6 @@ export default function TodosContainer() {
               <a
                 className={filter === 'all' ? 'selected' : ''}
                 href="#/"
-                style={{ cursor: 'pointer' }}
               >
                 All
               </a>
@@ -178,7 +184,6 @@ export default function TodosContainer() {
               <a
                 className={filter === 'active' ? 'selected' : ''}
                 href="#/active"
-                style={{ cursor: 'pointer' }}
               >
                 Active
               </a>
@@ -187,7 +192,6 @@ export default function TodosContainer() {
               <a
                 className={filter === 'completed' ? 'selected' : ''}
                 href="#/completed"
-                style={{ cursor: 'pointer' }}
               >
                 Completed
               </a>
@@ -196,6 +200,6 @@ export default function TodosContainer() {
           <button className="clear-completed">Clear completed</button>
         </footer>
       )}
-    </section>
+    </>
   );
 }
