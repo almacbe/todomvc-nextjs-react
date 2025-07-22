@@ -9,6 +9,10 @@ global.crypto = {
 };
 
 describe('TodosContainer', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('elimina todos los completados al hacer click en "Clear completed"', async () => {
     render(<TodosContainer />);
     const input = screen.getByPlaceholderText(/what needs to be done/i);

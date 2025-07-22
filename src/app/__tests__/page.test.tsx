@@ -4,6 +4,10 @@ import userEvent from '@testing-library/user-event';
 import Home from '../page';
 
 describe('TodoMVC - Página principal', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('muestra el input para añadir tareas', () => {
     render(<Home />);
     expect(screen.getByPlaceholderText(/what needs to be done/i)).toBeInTheDocument();

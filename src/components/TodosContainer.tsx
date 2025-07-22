@@ -4,7 +4,13 @@ import { useState, useRef, useEffect } from 'react';
 import { Todo } from '../types/Todo';
 
 export default function TodosContainer() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('todos');
+      if (stored) return JSON.parse(stored);
+    }
+    return [];
+  });
   const [input, setInput] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -90,6 +96,10 @@ export default function TodosContainer() {
     onHashChange();
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   // Filtrado de todos según el filtro activo
   const filteredTodos = todos.filter(todo => {

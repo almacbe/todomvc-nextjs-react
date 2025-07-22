@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const TODO_ITEM_ONE = 'buy some cheese';
 const TODO_ITEM_TWO = 'feed the cat';
 
-test.describe.skip('Persistence', () => {
+test.describe('Persistence', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.waitForSelector('.new-todo');
