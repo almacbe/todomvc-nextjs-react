@@ -16,6 +16,11 @@ This project is a classic TodoMVC implementation, allowing users to add, edit, c
 - **ESLint**: Linting tool for code quality and consistency.
 - **Prettier**: Code formatter for consistent style.
 
+## Deployment
+This project is automatically deployed on Netlify:
+
+👉 [View the live app on Netlify](https://todomvc-vuejs.netlify.app/)
+
 ## Getting Started
 
 ### Prerequisites
