@@ -1,16 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { usePersistedTodos } from '../hooks/usePersistedTodos';
 import { Todo } from '../types/Todo';
 
 export default function TodosContainer() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('todos');
-      if (stored) return JSON.parse(stored) as Todo[];
-    }
-    return [] as Todo[];
-  });
+  const [todos, setTodos] = usePersistedTodos();
   const [input, setInput] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -96,10 +91,6 @@ export default function TodosContainer() {
     onHashChange();
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
 
   return (
     <>
