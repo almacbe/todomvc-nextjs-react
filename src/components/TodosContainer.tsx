@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePersistedTodos } from '../hooks/usePersistedTodos';
-import { Todo } from '../types/Todo';
+import { Todo, Filter } from '../types/Todo';
 import TodoList from './TodoList';
 import TodoFooter from './TodoFooter';
 import { filterTodos } from '../utils/filterTodos';
@@ -10,7 +10,7 @@ import { filterTodos } from '../utils/filterTodos';
 export default function TodosContainer() {
   const [todos, setTodos] = usePersistedTodos();
   const [input, setInput] = useState('');
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<Filter>('all');
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();

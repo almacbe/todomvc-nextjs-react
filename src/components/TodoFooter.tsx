@@ -1,4 +1,4 @@
-type Filter = 'all' | 'active' | 'completed';
+import { Filter } from '../types/Todo';
 
 export default function TodoFooter({
   filter,

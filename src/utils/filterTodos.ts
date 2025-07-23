@@ -1,6 +1,4 @@
-import { Todo } from '../types/Todo';
-
-export type Filter = 'all' | 'active' | 'completed';
+import { Todo, Filter } from '../types/Todo';
 
 export function filterTodos(todos: Todo[], filter: Filter): Todo[] {
   if (filter === 'all') return todos;

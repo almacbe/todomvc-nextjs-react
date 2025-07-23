@@ -1,4 +1,5 @@
 import { Todo } from '../types/Todo';
+import { Filter } from '../types/Todo';
 import TodoItem from './TodoItem';
 import { filterTodos } from '../utils/filterTodos';
 import { useState } from 'react';
@@ -14,7 +15,7 @@ export default function TodoList({
   onToggle: (id: string) => void;
   onEdit: (id: string, newTitle: string) => void;
   onDelete: (id: string) => void;
-  filter: 'all' | 'active' | 'completed';
+  filter: Filter;
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const filteredTodos = filterTodos(todos, filter);

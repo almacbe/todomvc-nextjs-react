@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Todo } from '../types/Todo';
-
-export type Filter = 'all' | 'active' | 'completed';
+import { Todo, Filter } from '../types/Todo';
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([]);
