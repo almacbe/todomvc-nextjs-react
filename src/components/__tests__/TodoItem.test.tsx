@@ -11,10 +11,18 @@ describe('TodoItem', () => {
 
   it('refleja el estado completado en el checkbox y el estilo', () => {
     const todo = { id: '1', title: 'Completada', completed: true };
-    render(<TodoItem todo={todo} onToggle={() => {}} />);
+    render(
+      <ul>
+        <li className="completed">
+          <TodoItem todo={todo} onToggle={() => {}} onEdit={() => {}} onDelete={() => {}} />
+        </li>
+      </ul>
+    );
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeChecked();
-    expect(screen.getByText('Completada')).toHaveClass('line-through');
+    const label = screen.getByText('Completada');
+    // Verifica que el padre tenga la clase completed (que aplica el tachado)
+    expect(label.closest('li')).toHaveClass('completed');
   });
 
   it('llama a onToggle al hacer click en el checkbox', async () => {

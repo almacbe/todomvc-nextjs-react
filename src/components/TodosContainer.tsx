@@ -1,17 +1,15 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { usePersistedTodos } from '../hooks/usePersistedTodos';
 import { Todo } from '../types/Todo';
+import TodoItem from './TodoItem';
 
 export default function TodosContainer() {
   const [todos, setTodos] = usePersistedTodos();
   const [input, setInput] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editValue, setEditValue] = useState('');
-  const [editOriginal, setEditOriginal] = useState('');
-  const editInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,47 +36,14 @@ export default function TodosContainer() {
 
   const activeCount = todos.filter((todo) => !todo.completed).length;
 
-  const startEditing = (id: string, title: string) => {
-    setEditingId(id);
-    setEditValue(title);
-    setEditOriginal(title);
-  };
-
-  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditValue(e.target.value);
-  };
-
-  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, id: string) => {
-    if (e.key === 'Enter') {
-      finishEditing(id);
-    } else if (e.key === 'Escape') {
-      cancelEditing();
-    }
-  };
-
-  const finishEditing = (id: string) => {
-    const trimmed = editValue.trim();
+  const handleEdit = (id: string, newTitle: string) => {
+    const trimmed = newTitle.trim();
     if (trimmed === '') {
       deleteTodo(id);
     } else {
       setTodos(todos.map((todo) => (todo.id === id ? { ...todo, title: trimmed } : todo)));
     }
-    setEditingId(null);
-    setEditValue('');
-    setEditOriginal('');
   };
-
-  const cancelEditing = () => {
-    setEditValue(editOriginal);
-    setEditingId(null);
-    setEditOriginal('');
-  };
-
-  useEffect(() => {
-    if (editingId && editInputRefs.current[editingId]) {
-      editInputRefs.current[editingId]?.focus();
-    }
-  }, [editingId]);
 
   useEffect(() => {
     function onHashChange() {
@@ -127,45 +92,24 @@ export default function TodosContainer() {
                 filter === 'all' ||
                 (filter === 'active' && !todo.completed) ||
                 (filter === 'completed' && todo.completed);
+              const isEditing = editingId === todo.id;
               return (
                 <li
                   key={todo.id}
-                  className={
-                    todo.completed && editingId === todo.id
-                      ? 'completed editing'
-                      : editingId === todo.id
-                        ? 'editing'
-                        : todo.completed
-                          ? 'completed'
-                          : ''
-                  }
-                  data-testid="todo-item"
                   style={!isVisible ? { display: 'none' } : {}}
+                  data-testid="todo-item"
+                  className={
+                    (todo.completed ? 'completed ' : '') + (isEditing ? 'editing' : '')
+                  }
                 >
-                  <div className="view">
-                    <input
-                      className="toggle"
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={() => toggleTodo(todo.id)}
-                    />
-                    <label onDoubleClick={() => startEditing(todo.id, todo.title)}>
-                      {todo.title}
-                    </label>
-                    <button className="destroy" onClick={() => deleteTodo(todo.id)} />
-                  </div>
-                  {editingId === todo.id && (
-                    <input
-                      className="edit"
-                      ref={(el) => {
-                        editInputRefs.current[todo.id] = el;
-                      }}
-                      value={editValue}
-                      onChange={handleEditChange}
-                      onBlur={() => finishEditing(todo.id)}
-                      onKeyDown={(event) => handleEditKeyDown(event, todo.id)}
-                    />
-                  )}
+                  <TodoItem
+                    todo={todo}
+                    onToggle={toggleTodo}
+                    onEdit={handleEdit}
+                    onDelete={deleteTodo}
+                    editing={isEditing}
+                    setEditingId={setEditingId}
+                  />
                 </li>
               );
             })}
