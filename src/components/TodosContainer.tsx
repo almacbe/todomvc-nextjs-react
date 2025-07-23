@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { usePersistedTodos } from '../hooks/usePersistedTodos';
 import { Todo } from '../types/Todo';
-import TodoItem from './TodoItem';
+import TodoList from './TodoList';
+import TodoFooter from './TodoFooter';
 
 export default function TodosContainer() {
   const [todos, setTodos] = usePersistedTodos();
@@ -35,6 +36,7 @@ export default function TodosContainer() {
   };
 
   const activeCount = todos.filter((todo) => !todo.completed).length;
+  const completedCount = todos.filter((todo) => todo.completed).length;
 
   const handleEdit = (id: string, newTitle: string) => {
     const trimmed = newTitle.trim();
@@ -86,67 +88,25 @@ export default function TodosContainer() {
             }}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
-          <ul className="todo-list">
-            {todos.map((todo) => {
-              const isVisible =
-                filter === 'all' ||
-                (filter === 'active' && !todo.completed) ||
-                (filter === 'completed' && todo.completed);
-              const isEditing = editingId === todo.id;
-              return (
-                <li
-                  key={todo.id}
-                  style={!isVisible ? { display: 'none' } : {}}
-                  data-testid="todo-item"
-                  className={
-                    (todo.completed ? 'completed ' : '') + (isEditing ? 'editing' : '')
-                  }
-                >
-                  <TodoItem
-                    todo={todo}
-                    onToggle={toggleTodo}
-                    onEdit={handleEdit}
-                    onDelete={deleteTodo}
-                    editing={isEditing}
-                    setEditingId={setEditingId}
-                  />
-                </li>
-              );
-            })}
-          </ul>
+          <TodoList
+            todos={todos}
+            onToggle={toggleTodo}
+            onEdit={handleEdit}
+            onDelete={deleteTodo}
+            editingId={editingId}
+            setEditingId={setEditingId}
+            filter={filter}
+          />
         </section>
       )}
       {todos.length > 0 && (
-        <footer className="footer">
-          <span className="todo-count">
-            <strong>{activeCount}</strong> item{activeCount !== 1 ? 's' : ''} left!
-          </span>
-          <ul className="filters">
-            <li>
-              <a className={filter === 'all' ? 'selected' : ''} href="#/">
-                All
-              </a>
-            </li>
-            <li>
-              <a className={filter === 'active' ? 'selected' : ''} href="#/active">
-                Active
-              </a>
-            </li>
-            <li>
-              <a className={filter === 'completed' ? 'selected' : ''} href="#/completed">
-                Completed
-              </a>
-            </li>
-          </ul>
-          {todos.some((todo) => todo.completed) && (
-            <button
-              className="clear-completed"
-              onClick={() => setTodos(todos.filter((todo) => !todo.completed))}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+        <TodoFooter
+          filter={filter}
+          setFilter={setFilter}
+          activeCount={activeCount}
+          completedCount={completedCount}
+          onClearCompleted={() => setTodos(todos.filter((todo) => !todo.completed))}
+        />
       )}
     </>
   );

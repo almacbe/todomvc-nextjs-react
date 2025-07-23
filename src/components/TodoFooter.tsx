@@ -4,39 +4,34 @@ export default function TodoFooter({
   filter,
   setFilter,
   activeCount,
+  completedCount,
+  onClearCompleted,
 }: {
   filter: Filter;
   setFilter: (f: Filter) => void;
   activeCount: number;
+  completedCount: number;
+  onClearCompleted: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-b border-t border-gray-200 bg-white px-8 pt-2 pb-4 font-sans text-xs text-gray-500 shadow-md">
-      <span className="font-light" data-testid="active-count">
-        {activeCount} item{activeCount !== 1 ? 's' : ''} left
+    <footer className="footer">
+      <span className="todo-count" data-testid="active-count">
+        <strong>{activeCount}</strong> item{activeCount !== 1 ? 's' : ''} left
       </span>
-      <div className="flex gap-2">
-        <button
-          className={`rounded px-2 py-1 transition-colors hover:bg-gray-100 focus:outline-none ${filter === 'all' ? 'bg-blue-100 font-semibold text-blue-600' : ''}`}
-          onClick={() => setFilter('all')}
-        >
-          All
-        </button>
-        <button
-          className={`rounded px-2 py-1 transition-colors hover:bg-gray-100 focus:outline-none ${filter === 'active' ? 'bg-blue-100 font-semibold text-blue-600' : ''}`}
-          onClick={() => setFilter('active')}
-        >
-          Active
-        </button>
-        <button
-          className={`rounded px-2 py-1 transition-colors hover:bg-gray-100 focus:outline-none ${filter === 'completed' ? 'bg-blue-100 font-semibold text-blue-600' : ''}`}
-          onClick={() => setFilter('completed')}
-        >
-          Completed
-        </button>
-      </div>
-      <button className="text-gray-400 transition-colors hover:text-red-500">
-        Clear completed
-      </button>
-    </div>
+      <ul className="filters">
+        <li>
+          <a href="#/" className={filter === 'all' ? 'selected' : ''} onClick={() => setFilter('all')}>All</a>
+        </li>
+        <li>
+          <a href="#/active" className={filter === 'active' ? 'selected' : ''} onClick={() => setFilter('active')}>Active</a>
+        </li>
+        <li>
+          <a href="#/completed" className={filter === 'completed' ? 'selected' : ''} onClick={() => setFilter('completed')}>Completed</a>
+        </li>
+      </ul>
+      {completedCount > 0 && (
+        <button className="clear-completed" onClick={onClearCompleted}>Clear completed</button>
+      )}
+    </footer>
   );
 }
