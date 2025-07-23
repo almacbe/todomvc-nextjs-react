@@ -20,17 +20,37 @@ export default function TodoFooter({
       </span>
       <ul className="filters">
         <li>
-          <a href="#/" className={filter === 'all' ? 'selected' : ''} onClick={() => setFilter('all')}>All</a>
+          <a
+            href="#/"
+            className={filter === 'all' ? 'selected' : ''}
+            onClick={() => setFilter('all')}
+          >
+            All
+          </a>
         </li>
         <li>
-          <a href="#/active" className={filter === 'active' ? 'selected' : ''} onClick={() => setFilter('active')}>Active</a>
+          <a
+            href="#/active"
+            className={filter === 'active' ? 'selected' : ''}
+            onClick={() => setFilter('active')}
+          >
+            Active
+          </a>
         </li>
         <li>
-          <a href="#/completed" className={filter === 'completed' ? 'selected' : ''} onClick={() => setFilter('completed')}>Completed</a>
+          <a
+            href="#/completed"
+            className={filter === 'completed' ? 'selected' : ''}
+            onClick={() => setFilter('completed')}
+          >
+            Completed
+          </a>
         </li>
       </ul>
       {completedCount > 0 && (
-        <button className="clear-completed" onClick={onClearCompleted}>Clear completed</button>
+        <button className="clear-completed" onClick={onClearCompleted}>
+          Clear completed
+        </button>
       )}
     </footer>
   );

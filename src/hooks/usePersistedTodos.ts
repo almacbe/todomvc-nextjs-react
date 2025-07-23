@@ -18,4 +18,4 @@ export function usePersistedTodos(): [Todo[], (todos: Todo[]) => void] {
   }, [todos]);
 
   return [todos, setTodos];
-} 
+}

@@ -1,5 +1,6 @@
 import { Todo } from '../types/Todo';
 import TodoItem from './TodoItem';
+import { filterTodos } from '../utils/filterTodos';
 
 export default function TodoList({
   todos,
@@ -18,23 +19,17 @@ export default function TodoList({
   setEditingId: (id: string | null) => void;
   filter: 'all' | 'active' | 'completed';
 }) {
-  if (todos.length === 0) return null;
+  const filteredTodos = filterTodos(todos, filter);
+  if (filteredTodos.length === 0) return null;
   return (
     <ul className="todo-list">
-      {todos.map((todo) => {
+      {filteredTodos.map((todo) => {
         const isEditing = editingId === todo.id;
-        const isVisible =
-          filter === 'all' ||
-          (filter === 'active' && !todo.completed) ||
-          (filter === 'completed' && todo.completed);
         return (
           <li
             key={todo.id}
             data-testid="todo-item"
-            className={
-              (todo.completed ? 'completed ' : '') + (isEditing ? 'editing' : '')
-            }
-            style={!isVisible ? { display: 'none' } : {}}
+            className={(todo.completed ? 'completed ' : '') + (isEditing ? 'editing' : '')}
           >
             <TodoItem
               todo={todo}

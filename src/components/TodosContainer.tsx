@@ -5,6 +5,7 @@ import { usePersistedTodos } from '../hooks/usePersistedTodos';
 import { Todo } from '../types/Todo';
 import TodoList from './TodoList';
 import TodoFooter from './TodoFooter';
+import { filterTodos } from '../utils/filterTodos';
 
 export default function TodosContainer() {
   const [todos, setTodos] = usePersistedTodos();
@@ -35,8 +36,8 @@ export default function TodosContainer() {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const activeCount = todos.filter((todo) => !todo.completed).length;
-  const completedCount = todos.filter((todo) => todo.completed).length;
+  const activeCount = filterTodos(todos, 'active').length;
+  const completedCount = filterTodos(todos, 'completed').length;
 
   const handleEdit = (id: string, newTitle: string) => {
     const trimmed = newTitle.trim();

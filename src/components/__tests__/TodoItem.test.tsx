@@ -16,7 +16,7 @@ describe('TodoItem', () => {
         <li className="completed">
           <TodoItem todo={todo} onToggle={() => {}} onEdit={() => {}} onDelete={() => {}} />
         </li>
-      </ul>
+      </ul>,
     );
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeChecked();
