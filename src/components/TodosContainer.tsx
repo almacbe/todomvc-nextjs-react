@@ -11,7 +11,6 @@ export default function TodosContainer() {
   const [todos, setTodos] = usePersistedTodos();
   const [input, setInput] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
-  const [editingId, setEditingId] = useState<string | null>(null);
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,8 +93,6 @@ export default function TodosContainer() {
             onToggle={toggleTodo}
             onEdit={handleEdit}
             onDelete={deleteTodo}
-            editingId={editingId}
-            setEditingId={setEditingId}
             filter={filter}
           />
         </section>

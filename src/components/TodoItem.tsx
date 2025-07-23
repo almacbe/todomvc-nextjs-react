@@ -20,6 +20,10 @@ export default function TodoItem({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    setEditValue(todo.title);
+  }, [todo.title]);
+
+  useEffect(() => {
     if (editing) inputRef.current?.focus();
   }, [editing]);
 
@@ -29,8 +33,14 @@ export default function TodoItem({
 
   const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onEdit(todo.id, editValue);
-      setEditingId(null);
+      const trimmed = editValue.trim();
+      if (trimmed === '') {
+        onDelete(todo.id);
+        setEditingId(null);
+      } else {
+        onEdit(todo.id, trimmed);
+        setEditingId(null);
+      }
     } else if (e.key === 'Escape') {
       setEditingId(null);
       setEditValue(todo.title);
@@ -38,22 +48,36 @@ export default function TodoItem({
   };
 
   const handleEditBlur = () => {
-    onEdit(todo.id, editValue);
-    setEditingId(null);
+    const trimmed = editValue.trim();
+    if (trimmed === '') {
+      onDelete(todo.id);
+      setEditingId(null);
+    } else {
+      onEdit(todo.id, trimmed);
+      setEditingId(null);
+    }
   };
 
   return (
     <>
-      <div className="view">
-        <input
-          className="toggle"
-          type="checkbox"
-          checked={todo.completed}
-          onChange={() => onToggle(todo.id)}
-        />
-        <label onDoubleClick={() => setEditingId(todo.id)}>{todo.title}</label>
-        <button className="destroy" onClick={() => onDelete(todo.id)} />
-      </div>
+      {!editing && (
+        <div className="view">
+          <input
+            className="toggle"
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() => onToggle(todo.id)}
+          />
+          <label onDoubleClick={() => setEditingId(todo.id)}>{todo.title}</label>
+          <button
+            className="destroy"
+            onClick={() => {
+              onDelete(todo.id);
+              setEditingId(null);
+            }}
+          />
+        </div>
+      )}
       {editing && (
         <input
           ref={inputRef}
